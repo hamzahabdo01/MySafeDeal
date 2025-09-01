@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package auth.v0;
+
+import "google/protobuf/wrappers.proto";
+
+option go_package = "./proto/auth/v0";
+
+service AuthService {
+  rpc VerifyToken (VerifyTokenRequest) returns (VerifyTokenResponse);
+  rpc GetUser (GetUserRequest) returns (GetUserResponse);
+  rpc CheckWalletAddress(CheckWalletAddressRequest) returns (CheckWalletAddressResponse);
+  rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse);
+}
+
+message VerifyTokenRequest {
+  string token = 1;
+}
+
+message VerifyTokenResponse {
+  bool valid = 1;
+  uint32 user_id = 2;
+  string session_id = 3;
+  int64 expires_at = 4;
+}
+message User {
+  uint32 id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string email = 4;
+  bool activated = 5;
+  int32 version = 6;
+ google.protobuf.StringValue wallet_address = 7;
+ google.protobuf.StringValue account_name = 8;
+  google.protobuf.StringValue account_number = 9;
+  google.protobuf.Int32Value bank_code = 10;
+}
+
+message GetUserRequest {
+  uint32 user_id = 1;
+}
+
+message GetUserResponse {
+  bool success = 1;
+  User user = 2;
+  string error = 3;
+}
+
+message CheckWalletAddressRequest {
+  string wallet_address = 1;
+}
+
+message CheckWalletAddressResponse {
+  bool exists = 1;
+  uint32 user_id = 2; 
+}
+
+message UpdateUserRequest {
+  uint32 user_id = 1;
+  string wallet_address = 2;
+  string encrypted_private_key = 3;
+}
+
+message UpdateUserResponse {
+  bool success = 1;
+  string error = 2;
+}
